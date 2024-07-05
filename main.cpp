@@ -4,6 +4,7 @@
 #include <ctime>
 #include <filesystem>
 #include <iostream>
+
 using namespace std;
 namespace fs = filesystem;
 
@@ -17,7 +18,7 @@ static void do_a_backup()
    string archive_name = "\\backup";
    time_t t = time(nullptr);
    char mbstr[100];
-   strftime(mbstr, sizeof(mbstr), "%Yy_%mm_%dd_%Hh", localtime(&t));
+   strftime(mbstr, sizeof(mbstr), "%Yy_%mm_%dd_%Hh_%Mm", localtime(&t));
    archive_name += ("_" + string(mbstr) + ".zip ");
 
    // finding "newest" folder in Elden Ring saves - which being played now
@@ -43,13 +44,13 @@ static void do_a_backup()
 
 int main()
 {
-   char hours;
-   cout << "Enter number of hours you want to wait between backups: ";
-   cin >> hours;
+   float minutes;
+   cout << "Enter number of minutes you want to wait between backups: ";
+   cin >> minutes;
    while ( true )
    {
       do_a_backup();
-      Sleep(1000 * 60 * 60 * hours);
+      Sleep(1000 * 60 * minutes);
    }
 
    system("pause");
