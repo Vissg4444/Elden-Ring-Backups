@@ -4,6 +4,8 @@
 #include <ctime>
 #include <filesystem>
 #include <iostream>
+#include <thread>
+#include <conio.h>
 
 using namespace std;
 namespace fs = filesystem;
@@ -39,19 +41,28 @@ static void do_a_backup()
    // executing 7z command
    string command = "\"7za.exe\"  a -tzip -mx=9 " + path + "\\backups" + archive_name + path + "\\ER0000.co2 " + path + "\\ER0000.co2.bak";
    system(command.c_str());
+   cout << "If you want to do a force backup, press \"y\".";
 }
 
+static void wait(float minutes)
+{
+   do_a_backup();
+   Sleep(1000 * 60 * minutes);
+   wait(minutes);
+}
 
 int main()
 {
    float minutes;
    cout << "Enter number of minutes you want to wait between backups: ";
    cin >> minutes;
+   thread repeat(wait, minutes);
+   repeat.detach();
+
    while ( true )
    {
-      do_a_backup();
-      Sleep(1000 * 60 * minutes);
+      if ( _getch() == 'y' )
+         do_a_backup();
    }
-
    system("pause");
 }
